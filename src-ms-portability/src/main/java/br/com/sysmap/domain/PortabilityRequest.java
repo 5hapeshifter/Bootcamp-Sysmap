@@ -1,10 +1,7 @@
 package br.com.sysmap.domain;
 
 import br.com.sysmap.domain.enums.PortabilityStatusEnum;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,6 +12,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tb_portabilities_requests")
 public class PortabilityRequest {
 

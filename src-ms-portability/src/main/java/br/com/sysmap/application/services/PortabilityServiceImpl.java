@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -22,9 +23,26 @@ public class PortabilityServiceImpl implements PortabilityService {
     private PortabilityRepository portabilityRepository;
 
     @Override
-    public void savePortability(PortabilityRequest requestPortability) {
+    public PortabilityRequest savePortability(PortabilityRequest requestPortability) {
         requestPortability.setStatus(PortabilityStatusEnum.PROCESSANDO_PORTABILIDADE);
         requestPortability.setDataDasolicitacao(LocalDateTime.now());
         PortabilityRequest request = portabilityRepository.save(requestPortability);
+        return request;
     }
+
+    @Override
+    public PortabilityRequest getPortabilityById(UUID uuid) {
+        return portabilityRepository.findById(uuid).get();
+    }
+
+    @Override
+    public PortabilityRequest updatePortability(UUID uuid, PortabilityRequest portabilityRequest) {
+        var solicitacao = portabilityRepository.getById(uuid);
+        solicitacao.setPortability(portabilityRequest.getPortability());
+        solicitacao.setUser(portabilityRequest.getUser());
+        solicitacao.setDataDasolicitacao(LocalDateTime.now());
+        solicitacao = portabilityRepository.save(solicitacao);
+        return solicitacao;
+    }
+
 }

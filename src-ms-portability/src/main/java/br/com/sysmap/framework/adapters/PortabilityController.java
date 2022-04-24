@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/ms_portability")
+@RequestMapping("/portability")
 public class PortabilityController {
 
     @Autowired
@@ -16,8 +18,27 @@ public class PortabilityController {
 
     @PostMapping
     public ResponseEntity<String> createPortability(@RequestBody PortabilityRequest requestPortability) {
-       portabilityService.savePortability(requestPortability);
-        return ResponseEntity.status(HttpStatus.OK).body("Requisição cadastrada");
+       var solicitacao = portabilityService.savePortability(requestPortability);
+        return ResponseEntity.status(HttpStatus.OK).body("Portabilidade cadastrada! ID = " + solicitacao.getRequestid());
+    }
+
+    @GetMapping(path = "/{portabilityId}")
+    public ResponseEntity<Object> getPortabilityById(@PathVariable(name = "portabilityId") UUID uuid) {
+        var request = portabilityService.getPortabilityById(uuid);
+        if(request == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requisição com ID " + uuid + "não localizada");
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(request);
+    }
+
+    @PutMapping(path = "/{portabilityId}")
+    public ResponseEntity<Object> updatePortability(@PathVariable(name = "portabilityId") UUID uuid,
+                                                    @RequestBody PortabilityRequest portabilityRequest) {
+        var request = portabilityService.updatePortability(uuid, portabilityRequest);
+        if(request == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requisição com ID " + uuid + "não localizada");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(request);
     }
 
 }

@@ -22,7 +22,7 @@ public class Line implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID lineId;
 
-    @Column(nullable = false, length = 9)
+    @Column(nullable = false, length = 11)
     private String number;
 }
 
