@@ -25,9 +25,6 @@ public class PortabilityController {
     @GetMapping(path = "/{portabilityId}")
     public ResponseEntity<Object> getPortabilityById(@PathVariable(name = "portabilityId") UUID uuid) {
         var request = portabilityService.getPortabilityById(uuid);
-        if(request == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requisição com ID " + uuid + "não localizada");
-        }
         return ResponseEntity.status(HttpStatus.FOUND).body(request);
     }
 
@@ -35,9 +32,6 @@ public class PortabilityController {
     public ResponseEntity<Object> updatePortability(@PathVariable(name = "portabilityId") UUID uuid,
                                                     @RequestBody PortabilityRequest portabilityRequest) {
         var request = portabilityService.updatePortability(uuid, portabilityRequest);
-        if(request == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requisição com ID " + uuid + "não localizada");
-        }
         return ResponseEntity.status(HttpStatus.OK).body(request);
     }
 
