@@ -1,13 +1,13 @@
 package br.com.sysmap.application.ports.in;
 
-import br.com.sysmap.domain.PortabilityRequest;
+import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
 
 import java.util.UUID;
 
 public interface PortabilityService {
-    PortabilityRequest savePortability(PortabilityRequest requestPortability);
+    PortabilityRequestDto savePortability(PortabilityRequestDto requestPortability);
 
-    PortabilityRequest getPortabilityById(UUID uuid);
+    PortabilityRequestDto getPortabilityById(UUID uuid);
 
-    PortabilityRequest updatePortability(UUID uuid, PortabilityRequest portabilityRequest);
+    PortabilityRequestDto updatePortability(UUID uuid, PortabilityRequestDto requestDto);
 }

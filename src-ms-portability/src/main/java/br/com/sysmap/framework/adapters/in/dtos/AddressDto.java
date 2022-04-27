@@ -1,19 +1,15 @@
-package br.com.sysmap.domain;
+package br.com.sysmap.framework.adapters.in.dtos;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.UUID;
 
-@Entity
-@Table(name = "tb_addresses")
-public class Address implements Serializable {
+public class AddressDto implements Serializable {
     private static final long seralVersionUID = 1L;
 
-    public Address() {
+    public AddressDto() {
     }
 
-    public Address(UUID addressId, String street, String number, String city, String country, String stateOrRegion) {
-        this.addressId = addressId;
+    public AddressDto(String street, String number, String city, String country, String stateOrRegion) {
         this.street = street;
         this.number = number;
         this.city = city;
@@ -21,27 +17,20 @@ public class Address implements Serializable {
         this.stateOrRegion = stateOrRegion;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID addressId;
-
+    @NotBlank(message = "Field 'street' cannot be blank")
     private String street;
 
+    @NotBlank(message = "Field 'number' cannot be blank")
     private String number;
 
+    @NotBlank(message = "Field 'city' cannot be blank")
     private String city;
 
+    @NotBlank(message = "Field 'country' cannot be blank")
     private String country;
 
-    private String stateOrRegion;;
-
-    public UUID getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(UUID addressId) {
-        this.addressId = addressId;
-    }
+    @NotBlank(message = "Field 'State or region' cannot be blank")
+    private String stateOrRegion;
 
     public String getStreet() {
         return street;

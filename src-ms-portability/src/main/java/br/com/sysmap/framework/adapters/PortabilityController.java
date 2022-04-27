@@ -1,12 +1,13 @@
 package br.com.sysmap.framework.adapters;
 
 import br.com.sysmap.application.ports.in.PortabilityService;
-import br.com.sysmap.domain.PortabilityRequest;
+import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -17,8 +18,8 @@ public class PortabilityController {
     private PortabilityService portabilityService;
 
     @PostMapping
-    public ResponseEntity<String> createPortability(@RequestBody PortabilityRequest requestPortability) {
-       var solicitacao = portabilityService.savePortability(requestPortability);
+    public ResponseEntity<String> createPortability(@RequestBody @Valid PortabilityRequestDto request) {
+       var solicitacao = portabilityService.savePortability(request);
         return ResponseEntity.status(HttpStatus.OK).body("Portabilidade cadastrada! ID = " + solicitacao.getRequestid());
     }
 
@@ -29,8 +30,8 @@ public class PortabilityController {
     }
 
     @PutMapping(path = "/{portabilityId}")
-    public ResponseEntity<Object> updatePortability(@PathVariable(name = "portabilityId") UUID uuid,
-                                                    @RequestBody PortabilityRequest portabilityRequest) {
+    public ResponseEntity<PortabilityRequestDto> updatePortability(@PathVariable(name = "portabilityId") UUID uuid,
+                                                    @RequestBody @Valid PortabilityRequestDto portabilityRequest) {
         var request = portabilityService.updatePortability(uuid, portabilityRequest);
         return ResponseEntity.status(HttpStatus.OK).body(request);
     }

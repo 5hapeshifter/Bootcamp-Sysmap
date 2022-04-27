@@ -1,7 +1,7 @@
 server:
   port: 8080
 
-# Configuração do banco de dados
+# Configuracao do banco de dados
 spring:
   application:
     name: src-ms-portability
@@ -11,7 +11,7 @@ spring:
     password: 23031990
   jpa:
     hibernate:
-      ddl-auto: update # Estamos habilitando a atualização do banco de dados automaticamente quando fizermos alterações nas classes
+      ddl-auto: update # Estamos habilitando a atualizacao do banco de dados automaticamente quando fizermos alteracoes nas classes
       dialect: org.hibernate.dialect.PostgreSQLDialect
       jdbc:
         lob.non-contextual-creation: true
