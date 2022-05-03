@@ -61,4 +61,5 @@ public class PortabilityServiceImpl implements PortabilityService {
         newEntity = portabilityRepository.save(newEntity);
         return portabilityMapper.portabilityEntityToDto(newEntity);
     }
+
 }

@@ -10,4 +10,5 @@ public interface PortabilityService {
     PortabilityRequestDto getPortabilityById(UUID uuid);
 
     PortabilityRequestDto updatePortability(UUID uuid, PortabilityRequestDto requestDto);
+
 }

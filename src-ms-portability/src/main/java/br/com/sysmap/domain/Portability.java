@@ -1,6 +1,6 @@
 package br.com.sysmap.domain;
 
-import br.com.sysmap.domain.enums.PortabilityEnum;
+import br.com.sysmap.domain.enums.PortabilityCorporationEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ public class Portability implements Serializable {
     public Portability() {
     }
 
-    public Portability(UUID portabilityId, PortabilityEnum source, PortabilityEnum target) {
+    public Portability(UUID portabilityId, PortabilityCorporationEnum source, PortabilityCorporationEnum target) {
         this.portabilityId = portabilityId;
         this.source = source;
         this.target = target;
@@ -25,10 +25,10 @@ public class Portability implements Serializable {
     private UUID portabilityId;
 
     @Enumerated(EnumType.STRING) // Formato que será salvo no BD
-    private PortabilityEnum source;
+    private PortabilityCorporationEnum source;
 
     @Enumerated(EnumType.STRING)
-    private PortabilityEnum target;
+    private PortabilityCorporationEnum target;
 
     public UUID getPortabilityId() {
         return portabilityId;
@@ -38,19 +38,19 @@ public class Portability implements Serializable {
         this.portabilityId = portabilityId;
     }
 
-    public PortabilityEnum getSource() {
+    public PortabilityCorporationEnum getSource() {
         return source;
     }
 
-    public void setSource(PortabilityEnum source) {
+    public void setSource(PortabilityCorporationEnum source) {
         this.source = source;
     }
 
-    public PortabilityEnum getTarget() {
+    public PortabilityCorporationEnum getTarget() {
         return target;
     }
 
-    public void setTarget(PortabilityEnum target) {
+    public void setTarget(PortabilityCorporationEnum target) {
         this.target = target;
     }
 }

@@ -1,5 +1,5 @@
 package br.com.sysmap.domain.enums;
 
-public enum PortabilityEnum {
+public enum PortabilityCorporationEnum {
     VIVO, CLARO, OI, TIM
 }

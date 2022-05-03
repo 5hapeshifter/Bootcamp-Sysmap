@@ -1,6 +1,7 @@
 package br.com.sysmap.framework.adapters;
 
 import br.com.sysmap.application.ports.in.PortabilityService;
+import br.com.sysmap.application.ports.out.KafkaService;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,14 @@ public class PortabilityController {
     @Autowired
     private PortabilityService portabilityService;
 
+    @Autowired
+    private KafkaService kafkaService;
+
     @PostMapping
     public ResponseEntity<String> createPortability(@RequestBody @Valid PortabilityRequestDto request) {
        var solicitacao = portabilityService.savePortability(request);
-        return ResponseEntity.status(HttpStatus.OK).body("Portabilidade cadastrada! ID = " + solicitacao.getRequestid());
+       kafkaService.publishPortability(solicitacao);
+       return ResponseEntity.status(HttpStatus.OK).body("Portabilidade cadastrada! ID = " + solicitacao.getRequestid());
     }
 
     @GetMapping(path = "/{portabilityId}")
