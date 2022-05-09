@@ -1,0 +1,29 @@
+server:
+  port: 8081
+
+# Configuracao do banco de dados
+spring:
+  application:
+    name: svc-ms-sign-portability
+  datasource:
+    url: jdbc:postgresql://localhost:5432/svc-ms-sign-portability
+    username: postgres
+    password: 23031990
+  jpa:
+    hibernate:
+      ddl-auto: update # Estamos habilitando a atualizacao do banco de dados automaticamente quando fizermos alteracoes nas classes
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        lob.non-contextual-creation: true
+    properties:
+      hibernate:
+        show_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: portability
+
+topic:
+  name:
+    consumer: portability

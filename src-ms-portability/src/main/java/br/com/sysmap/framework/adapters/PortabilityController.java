@@ -16,15 +16,14 @@ import java.util.UUID;
 public class PortabilityController {
 
     @Autowired
-    private PortabilityService portabilityService;
+    KafkaService kafkaService;
 
     @Autowired
-    private KafkaService kafkaService;
+    private PortabilityService portabilityService;
 
     @PostMapping
     public ResponseEntity<String> createPortability(@RequestBody @Valid PortabilityRequestDto request) {
        var solicitacao = portabilityService.savePortability(request);
-       kafkaService.publishPortability(solicitacao);
        return ResponseEntity.status(HttpStatus.OK).body("Portabilidade cadastrada! ID = " + solicitacao.getRequestid());
     }
 

@@ -1,8 +1,9 @@
 package br.com.sysmap.application.ports.out;
 
-import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
+import br.com.sysmap.domain.PortabilityPublishRequest;
 
 public interface KafkaService {
 
-    void publishPortability(PortabilityRequestDto portabilityRequestDto);
+    void publishPortability(PortabilityPublishRequest request);
+
 }

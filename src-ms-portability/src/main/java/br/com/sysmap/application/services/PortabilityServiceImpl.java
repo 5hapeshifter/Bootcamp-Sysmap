@@ -1,12 +1,12 @@
 package br.com.sysmap.application.services;
 
 import br.com.sysmap.application.ports.in.PortabilityService;
+import br.com.sysmap.application.ports.out.KafkaService;
 import br.com.sysmap.domain.enums.PortabilityStatusEnum;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
 import br.com.sysmap.framework.adapters.out.PortabilityRepository;
 import br.com.sysmap.framework.config.PortabilityMapper;
 import br.com.sysmap.framework.exceptions.PortabilityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,19 +16,16 @@ import java.util.UUID;
 @Service
 public class PortabilityServiceImpl implements PortabilityService {
 
-    @Autowired
     private PortabilityMapper portabilityMapper;
-
-//    @Autowired
-//    private ModelMapper modelMapper;
-
-    @Autowired
     private PortabilityRepository portabilityRepository;
+    private KafkaService kafkaService;
 
-//    public PortabilityServiceImpl(ModelMapper modelMapper, PortabilityRepository portabilityRepository) {
-//        this.modelMapper = modelMapper;
-//        this.portabilityRepository = portabilityRepository;
-//    }
+    public PortabilityServiceImpl(PortabilityMapper portabilityMapper, PortabilityRepository portabilityRepository, KafkaService kafkaService) {
+        this.portabilityMapper = portabilityMapper;
+        this.portabilityRepository = portabilityRepository;
+        this.kafkaService = kafkaService;
+    }
+
 
     @Override
     @Transactional
@@ -37,8 +34,10 @@ public class PortabilityServiceImpl implements PortabilityService {
         //PortabilityRequest entity = modelMapper.map(requestPortability, PortabilityRequest.class); // Transfere os parametros de mesmo nome(de um objeto para o outro) e retorna o objeto
         entity.setStatus(PortabilityStatusEnum.PROCESSANDO_PORTABILIDADE);
         entity.setDataDasolicitacao(LocalDateTime.now());
-        return portabilityMapper.portabilityEntityToDto(portabilityRepository.save(entity));
-
+        var result = portabilityMapper.portabilityEntityToDto(portabilityRepository.save(entity));
+        var published = portabilityMapper.createPortabilityTopublish(result);
+        kafkaService.publishPortability(published);
+        return result;
     }
 
     @Override

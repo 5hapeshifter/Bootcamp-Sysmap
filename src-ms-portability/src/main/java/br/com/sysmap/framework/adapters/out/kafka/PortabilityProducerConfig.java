@@ -1,6 +1,6 @@
 package br.com.sysmap.framework.adapters.out.kafka;
 
-import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
+import br.com.sysmap.domain.PortabilityPublishRequest;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -31,7 +31,7 @@ public class PortabilityProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<UUID, PortabilityRequestDto> portabilityProducerFactory() { // Metodo que retornara um producer
+    public ProducerFactory<UUID, PortabilityPublishRequest> portabilityProducerFactory() { // Metodo que retornara um producer
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -40,7 +40,7 @@ public class PortabilityProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<UUID, PortabilityRequestDto> portabilityKafkaTemplate() { // Método que retorna um KafkaTemplate com as configs do ProducerFactory que sera postado no topico.
+    public KafkaTemplate<UUID, PortabilityPublishRequest> portabilityKafkaTemplate() { // Método que retorna um KafkaTemplate com as configs do ProducerFactory que sera postado no topico.
         return new KafkaTemplate<>(portabilityProducerFactory());
     }
 

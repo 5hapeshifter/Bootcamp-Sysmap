@@ -69,4 +69,16 @@ public class PortabilityMapper {
 
     }
 
+    public PortabilityPublishRequest createPortabilityTopublish(PortabilityRequestDto request) {
+        PortabilityPublishRequest portabilityPublished = new PortabilityPublishRequest();
+        Portability portability = new Portability();
+        portability.setPortabilityId(request.getRequestid());
+        portability.setSource(request.getPortability().getSource());
+        portability.setTarget(request.getPortability().getTarget());
+        portabilityPublished.setDocumentNumber(request.getUser().getDocumentNumber());
+        portabilityPublished.setNumber(request.getUser().getLine().getNumber());
+        portabilityPublished.setPortability(portability);
+        return portabilityPublished;
+    }
+
 }
