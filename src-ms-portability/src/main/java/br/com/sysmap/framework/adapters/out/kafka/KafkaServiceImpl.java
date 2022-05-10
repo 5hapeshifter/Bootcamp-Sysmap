@@ -22,8 +22,8 @@ public class KafkaServiceImpl implements KafkaService {
     }
 
     public void publishPortability(PortabilityPublishRequest request) {
-        String msgSuccess = String.format("Mensagem enviada com SUCESSO para o topico %s, Mensagem = %s ", topicName, request.toString());
-        String msgFailure = String.format("FALHA ao enviar a mensagem para o topico %s, Mensagem = %s ", topicName, request.toString());
+        String msgSuccess = String.format("Mensagem enviada com SUCESSO para o topico [%s], Mensagem = %s ", topicName, request.toString());
+        String msgFailure = String.format("FALHA ao enviar a mensagem para o topico [%s], Mensagem = %s ", topicName, request.toString());
         kafkaTemplate.send(topicName, request).addCallback(
             success -> log.info(msgSuccess),
             failure -> log.info(msgFailure)
