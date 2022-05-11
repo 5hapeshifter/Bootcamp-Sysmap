@@ -5,6 +5,7 @@ import br.com.sysmap.application.ports.out.KafkaService;
 import br.com.sysmap.domain.enums.PortabilityStatusEnum;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
 import br.com.sysmap.framework.adapters.out.PortabilityRepository;
+import br.com.sysmap.framework.adapters.in.dtos.PortabilityResponseStatus;
 import br.com.sysmap.framework.config.PortabilityMapper;
 import br.com.sysmap.framework.exceptions.PortabilityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -49,16 +50,14 @@ public class PortabilityServiceImpl implements PortabilityService {
 
     @Override
     @Transactional
-    public PortabilityRequestDto updatePortability(UUID uuid, PortabilityRequestDto requestDto) {
-        var oldEntity = portabilityRepository.findById(uuid)
-                .orElseThrow(() -> new PortabilityNotFoundException("Portability request not found."));
-        oldEntity.setStatus(PortabilityStatusEnum.PORTABILIDADE_ALTERADA);
-        portabilityRepository.save(oldEntity);
-        var newEntity = portabilityMapper.portabilityDtoToEntity(requestDto);
-        newEntity.setStatus(PortabilityStatusEnum.PROCESSANDO_PORTABILIDADE);
-        newEntity.setDataDasolicitacao(LocalDateTime.now());
-        newEntity = portabilityRepository.save(newEntity);
-        return portabilityMapper.portabilityEntityToDto(newEntity);
+    public PortabilityResponseStatus updatePortability(UUID uuid, PortabilityResponseStatus status) {
+        var entity = portabilityRepository.getById(uuid);
+        if (entity == null) {
+            throw new PortabilityNotFoundException("Portability request not found.");
+        }
+        entity.setStatus(status.getStatus());
+        portabilityRepository.save(entity);
+        return status;
     }
 
 }

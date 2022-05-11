@@ -1,4 +1,4 @@
-package br.com.sysmap.framework.adapters.out;
+package br.com.sysmap.application.ports.out;
 
 import br.com.sysmap.domain.PortabilityPublishRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

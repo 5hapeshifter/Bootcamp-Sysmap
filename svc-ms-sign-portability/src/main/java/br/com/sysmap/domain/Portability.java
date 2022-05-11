@@ -19,7 +19,6 @@ public class Portability implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID portabilityId;
 
     @Enumerated(EnumType.STRING) // Formato que será salvo no BD

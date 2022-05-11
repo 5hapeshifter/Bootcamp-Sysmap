@@ -1,8 +1,11 @@
 package br.com.sysmap.domain;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(name = "tb_portabilities_published")
 public class PortabilityPublishRequest {

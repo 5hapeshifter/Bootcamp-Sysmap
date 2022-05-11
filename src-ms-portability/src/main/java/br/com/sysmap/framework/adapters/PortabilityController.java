@@ -3,6 +3,7 @@ package br.com.sysmap.framework.adapters;
 import br.com.sysmap.application.ports.in.PortabilityService;
 import br.com.sysmap.application.ports.out.KafkaService;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
+import br.com.sysmap.framework.adapters.in.dtos.PortabilityResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +35,10 @@ public class PortabilityController {
     }
 
     @PutMapping(path = "/{portabilityId}")
-    public ResponseEntity<PortabilityRequestDto> updatePortability(@PathVariable(name = "portabilityId") UUID uuid,
-                                                    @RequestBody @Valid PortabilityRequestDto portabilityRequest) {
-        var request = portabilityService.updatePortability(uuid, portabilityRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(request);
+    public ResponseEntity<PortabilityResponseStatus> updatePortability(@PathVariable(name = "portabilityId") UUID uuid,
+                                                    @RequestBody @Valid PortabilityResponseStatus portabilityRequest) {
+        var status = portabilityService.updatePortability(uuid, portabilityRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 
 }
