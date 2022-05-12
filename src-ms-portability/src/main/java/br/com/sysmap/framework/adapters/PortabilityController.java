@@ -22,6 +22,8 @@ public class PortabilityController {
     @Autowired
     private PortabilityService portabilityService;
 
+
+
     @PostMapping
     public ResponseEntity<String> createPortability(@RequestBody @Valid PortabilityRequestDto request) {
        var solicitacao = portabilityService.savePortability(request);

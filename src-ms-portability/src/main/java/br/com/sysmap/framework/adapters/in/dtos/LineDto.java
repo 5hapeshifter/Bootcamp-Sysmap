@@ -10,7 +10,7 @@ public class LineDto implements Serializable {
 
     @Valid
     @NotBlank(message = "Field 'number' must to be filled")
-    @Size(min = 11, max = 11)
+    @Size(min = 9, max = 9)
     private String number;
 
     public LineDto() {

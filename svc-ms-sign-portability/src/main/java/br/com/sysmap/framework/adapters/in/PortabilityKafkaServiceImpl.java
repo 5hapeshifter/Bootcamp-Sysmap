@@ -33,7 +33,6 @@ public class PortabilityKafkaServiceImpl implements PortabilityKafkaService {
                 .number(received.getNumber())
                 .portability(portability)
                 .build();
-        //entity.setPortability(portability);
 
         service.save(entity);
     }
