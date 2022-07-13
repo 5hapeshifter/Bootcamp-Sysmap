@@ -6,9 +6,11 @@ import br.com.sysmap.application.ports.out.PortabilityFeign;
 import br.com.sysmap.domain.PortabilityCorporationEnum;
 import br.com.sysmap.domain.PortabilityPublishRequest;
 import br.com.sysmap.domain.PortabilityStatusEnum;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
+@Primary
 public class PortabilityServiceImpl implements PortabilityService {
 
     private final PortabilityConsumerRepository repository;
