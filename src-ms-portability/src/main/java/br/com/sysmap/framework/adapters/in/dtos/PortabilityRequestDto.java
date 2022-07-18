@@ -4,6 +4,13 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 public class PortabilityRequestDto {
+
+    private UUID requestid;
+    private UserDto user;
+
+    @NotNull(message = "Portability has to be filled.")
+    private PortabilityDto portability;
+
     public PortabilityRequestDto() {
     }
 
@@ -12,13 +19,6 @@ public class PortabilityRequestDto {
         this.user = user;
         this.portability = portability;
     }
-
-    private UUID requestid;
-
-    private UserDto user;
-
-    @NotNull(message = "Portability has to be filled.")
-    private PortabilityDto portability;
 
     public UUID getRequestid() {
         return requestid;

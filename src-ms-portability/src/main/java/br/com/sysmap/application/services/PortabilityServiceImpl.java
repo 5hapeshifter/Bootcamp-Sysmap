@@ -32,12 +32,10 @@ public class PortabilityServiceImpl implements PortabilityService {
     @Transactional
     public PortabilityRequestDto savePortability(PortabilityRequestDto requestPortability) {
         var entity = portabilityMapper.portabilityDtoToEntity(requestPortability);
-        //PortabilityRequest entity = modelMapper.map(requestPortability, PortabilityRequest.class); // Transfere os parametros de mesmo nome(de um objeto para o outro) e retorna o objeto
         entity.setStatus(PortabilityStatusEnum.PROCESSANDO_PORTABILIDADE);
         entity.setDataDasolicitacao(LocalDateTime.now());
         var result = portabilityMapper.portabilityEntityToDto(portabilityRepository.save(entity));
-        var published = portabilityMapper.createPortabilityTopublish(result);
-        kafkaService.publishPortability(published);
+        kafkaService.publishPortability(portabilityMapper.createPortabilityTopublish(result));
         return result;
     }
 
