@@ -2,6 +2,8 @@ package br.com.sysmap.framework.adapters;
 
 import br.com.sysmap.application.services.PortabilityServiceImpl;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
+import br.com.sysmap.framework.adapters.in.dtos.PortabilityResponseStatus;
+import br.com.sysmap.framework.exceptions.PortabilityNotFoundException;
 import br.com.sysmap.tests.Factory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @WebMvcTest(PortabilityController.class)
 class PortabilityControllerTest {
 
@@ -32,24 +36,29 @@ class PortabilityControllerTest {
     private PortabilityServiceImpl portabilityService;
 
 
-
+    private UUID existingID;
+    private UUID nonExistingID;
     private PortabilityRequestDto portabilityRequestDto;
-    private PortabilityRequestDto portabilityRequestDtoNull;
-
+    private PortabilityResponseStatus responseStatus;
 
     @BeforeEach
     public void setUp() {
+        existingID = UUID.randomUUID();
+        nonExistingID = UUID.randomUUID();
+        responseStatus = Factory.createPortabilityResponseStatus(UUID.randomUUID());
         portabilityRequestDto = Factory.createPortabilityRequestDto();
-        portabilityRequestDto.setRequestid(UUID.randomUUID());
-        portabilityRequestDtoNull = Factory.createPortabilityRequestDto();
-        portabilityRequestDtoNull.setPortability(null);
+        portabilityRequestDto.setRequestid(existingID);
         //Comportamentos simulados
-        Mockito.when(portabilityService.savePortability(ArgumentMatchers.any())).thenReturn(portabilityRequestDto);
+        Mockito.when(portabilityService.savePortability(any())).thenReturn(portabilityRequestDto);
+        Mockito.when(portabilityService.getPortabilityById(any())).thenReturn(portabilityRequestDto);
+        Mockito.when(portabilityService.getPortabilityById(nonExistingID)).thenThrow(PortabilityNotFoundException.class);
+        Mockito.when(portabilityService.updatePortability(ArgumentMatchers.eq(existingID), any())).thenReturn(responseStatus);
+        Mockito.when(portabilityService.updatePortability(ArgumentMatchers.eq(nonExistingID), any())).thenThrow(PortabilityNotFoundException.class);
 
     }
 
     @Test
-    void createPortability() throws Exception {
+    void createPortabilityShouldReturnOkWhenRequestIsCorrect() throws Exception {
         portabilityRequestDto.setRequestid(UUID.randomUUID());
         String dto = objectMapper.writeValueAsString(portabilityRequestDto);
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/portability")
@@ -57,28 +66,62 @@ class PortabilityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         );
-
         result.andExpect(MockMvcResultMatchers.status().isOk());
         result.andReturn().getResponse().getContentAsString().contains(portabilityRequestDto.getRequestid().toString());
     }
 
     @Test
-    void createPortability1() throws Exception {
+    void createPortabilityShouldReturnBadRequestWhenPortabilityIsNotPresent() throws Exception {
         portabilityRequestDto.setPortability(null);
         String dto = objectMapper.writeValueAsString(portabilityRequestDto);
-        ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/portability")
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/portability")
                 .content(dto)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         );
-        perform.andExpect(MockMvcResultMatchers.status().isCreated());
+        result.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    void getPortabilityById() {
+    void getPortabilityByIdShouldReturnPortabilityRequestDtoWhenIdExists() throws Exception {
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders
+                .get("/portability/{portabilityId}", portabilityRequestDto.getRequestid())
+                .accept(MediaType.APPLICATION_JSON)
+        );
+        result.andExpect(MockMvcResultMatchers.status().isFound());
+        result.andReturn().getResponse().getContentAsString().contains(portabilityRequestDto.getUser().getName());
     }
 
     @Test
-    void updatePortability() {
+    void getPortabilityByIdShouldReturnPortabilityNotFoundWhenIdDoesNotExists() throws Exception {
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders
+                .get("/portability/{portabilityId}", nonExistingID)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+        result.andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void updatePortabilityShouldReturnPortabilityResponseStatusWhenIdExists() throws Exception {
+        String response = objectMapper.writeValueAsString(responseStatus);
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put("/portability/{portabilityId}", existingID)
+                .content(response)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.jsonPath("id").exists());
+        result.andExpect(MockMvcResultMatchers.jsonPath("status").exists());
+    }
+
+    @Test
+    void updatePortabilityShouldReturnPortabilityNotFoundWhenIdDoesNotExists() throws Exception {
+        String response = objectMapper.writeValueAsString(responseStatus);
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put("/portability/{portabilityId}", nonExistingID)
+                .content(response)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+        result.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

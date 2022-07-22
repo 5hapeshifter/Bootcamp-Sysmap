@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Factory {
 
@@ -80,6 +81,10 @@ public class Factory {
         publishRequest.setNumber(dto.getUser().getLine().getNumber());
         publishRequest.setDocumentNumber(dto.getUser().getDocumentNumber());
         return publishRequest;
+    }
+
+    public static PortabilityResponseStatus createPortabilityResponseStatus(UUID uuid) {
+        return new PortabilityResponseStatus(PortabilityStatusEnum.PORTADO, uuid);
     }
 
 }
