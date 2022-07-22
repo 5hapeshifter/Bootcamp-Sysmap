@@ -2,7 +2,7 @@ package br.com.sysmap.framework.adapters.in.dtos;
 
 import br.com.sysmap.domain.enums.PortabilityCorporationEnum;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 public class PortabilityDto implements Serializable {
@@ -16,10 +16,10 @@ public class PortabilityDto implements Serializable {
 
     private static final long seralVersionUID = 1L;
 
-    @NotNull(message = "Field 'source' must to be filled" )
+    @NotBlank(message = "Field 'source' must to be filled" )
     private PortabilityCorporationEnum source;
 
-    @NotNull(message = "Field 'target' must to be filled" )
+    @NotBlank(message = "Field 'target' must to be filled" )
     private PortabilityCorporationEnum target;
 
     public PortabilityCorporationEnum getSource() {

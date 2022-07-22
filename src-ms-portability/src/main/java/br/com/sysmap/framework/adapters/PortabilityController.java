@@ -1,7 +1,6 @@
 package br.com.sysmap.framework.adapters;
 
 import br.com.sysmap.application.ports.in.PortabilityService;
-import br.com.sysmap.application.ports.out.KafkaService;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityRequestDto;
 import br.com.sysmap.framework.adapters.in.dtos.PortabilityResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,7 @@ import java.util.UUID;
 public class PortabilityController {
 
     @Autowired
-    KafkaService kafkaService;
-
-    @Autowired
     private PortabilityService portabilityService;
-
-
 
     @PostMapping
     public ResponseEntity<String> createPortability(@RequestBody @Valid PortabilityRequestDto request) {
